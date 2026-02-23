@@ -1,0 +1,114 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Background */
+body {
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+}
+
+/* Main Container */
+.popup-content {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    padding: 40px;
+    width: 400px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Heading */
+h1 {
+    position: absolute;
+    top: 40px;
+    color: white;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+/* Popup Background */
+.popup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Titles */
+#popupTitle {
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: white;
+}
+
+/* Input */
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    margin-bottom: 20px;
+    font-size: 15px;
+    text-align: center;
+}
+
+/* Buttons */
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #764ba2;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 5px;
+}
+
+/* Button Hover */
+button:hover {
+    background: #764ba2;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Close Button */
+button:last-child {
+    background: #ff4d4d;
+    color: white;
+}
+
+button:last-child:hover {
+    background: #cc0000;
+}
+
+/* Response Message */
+#responseMsg {
+    margin-top: 10px;
+    font-weight: 500;
+    color: white;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

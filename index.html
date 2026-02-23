@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Phone Checker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Phone Number System</h1>
+
+    <div class="buttons">
+        <button onclick="openSubmit()">Submit</button>
+        <button onclick="openSearch()">Search</button>
+    </div>
+
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <h2 id="popupTitle"></h2>
+            <input type="text" id="phoneInput" placeholder="Enter phone number">
+            <button onclick="handleAction()">Submit</button>
+            <p id="responseMsg"></p>
+            <button onclick="closePopup()">Close</button>
+        </div>
+    </div>
+
+<script src="script.js"></script>
+</body>
+</html>
