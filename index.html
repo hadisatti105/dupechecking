@@ -16,10 +16,22 @@
     <div id="popup" class="popup">
         <div class="popup-content">
             <h2 id="popupTitle"></h2>
-            <input type="text" id="phoneInput" placeholder="Enter phone number">
-            <button onclick="handleAction()">Submit</button>
+
+            <input 
+                type="text" 
+                id="phoneInput" 
+                placeholder="Enter 10-digit phone number"
+                maxlength="10"
+                onkeypress="handleEnter(event)"
+            >
+
+            <button id="actionBtn" onclick="handleAction()">Submit</button>
+
+            <div id="spinner" class="spinner"></div>
+
             <p id="responseMsg"></p>
-            <button onclick="closePopup()">Close</button>
+
+            <button class="close-btn" onclick="closePopup()">Close</button>
         </div>
     </div>
 
