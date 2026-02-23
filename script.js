@@ -79,7 +79,7 @@ async function handleAction() {
             data = await response.json();
 
             if (data.status === "found") {
-                responseMsg.innerText = "Number exists in database";
+                responseMsg.innerText = "Duplicate";
                 responseMsg.classList.add("success");
             } else {
                 responseMsg.innerText = "Not found";
