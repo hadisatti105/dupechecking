@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+    <h1>Admin Dashboard</h1>
+
+    <!-- ================= LOGIN SECTION ================= -->
+    <div class="admin-login" id="loginSection">
+        <h2>Admin Login</h2>
+        <input type="password" id="adminPassword" placeholder="Enter Admin Password">
+        <button onclick="login()">Login</button>
+    </div>
+
+    <!-- ================= DASHBOARD SECTION ================= -->
+    <div id="dashboard" style="display:none;">
+
+        <!-- Logout -->
+        <button onclick="logout()" class="logout-btn">Logout</button>
+
+        <!-- ================= ANALYTICS ================= -->
+        <h2>Analytics Overview</h2>
+
+        <div class="stats-cards">
+            <div class="card">
+                <h3 id="submissionsCount">0</h3>
+                <p>Submissions</p>
+            </div>
+
+            <div class="card">
+                <h3 id="duplicatesCount">0</h3>
+                <p>Duplicates</p>
+            </div>
+
+            <div class="card">
+                <h3 id="searchesCount">0</h3>
+                <p>Searches</p>
+            </div>
+        </div>
+
+        <!-- ================= FILTER SECTION ================= -->
+        <h2>Filter By Date</h2>
+
+        <div class="filter-section">
+            <input type="date" id="startDate">
+            <input type="date" id="endDate">
+            <button onclick="applyFilter()">Filter</button>
+        </div>
+
+        <!-- ================= RESULTS ================= -->
+        <h2>Results</h2>
+
+        <div class="table-container">
+            <table id="resultsTable">
+                <thead>
+                    <tr>
+                        <th>Phone</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dynamic Rows Here -->
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script src="admin.js"></script>
+
+</body>
+</html>
