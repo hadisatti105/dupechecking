@@ -1,12 +1,10 @@
-// ===============================
-// CONFIG
-// ===============================
-const API_URL = "https://script.google.com/macros/s/AKfycbwiWioRQQfH3ujZNvc0KjggiPUDrAWc18bshKqa0Zz8CKuvkEbOGmTcIvTvKRnKT4pL/exec"; // 🔥 PUT YOUR REAL /exec URL HERE
+const API_URL = "https://script.google.com/macros/s/AKfycbwiWioRQQfH3ujZNvc0KjggiPUDrAWc18bshKqa0Zz8CKuvkEbOGmTcIvTvKRnKT4pL/exec";
+
 let adminPassword = "";
 
-// ===============================
+// ==========================
 // LOGIN
-// ===============================
+// ==========================
 function login() {
     adminPassword = document.getElementById("adminPassword").value.trim();
 
@@ -20,7 +18,7 @@ function login() {
 
     loadStats();
 
-    // Auto set today's date
+    // Auto load today's data
     const today = new Date().toISOString().split("T")[0];
     document.getElementById("startDate").value = today;
     document.getElementById("endDate").value = today;
@@ -28,16 +26,16 @@ function login() {
     applyFilter();
 }
 
-// ===============================
+// ==========================
 // LOGOUT
-// ===============================
+// ==========================
 function logout() {
     location.reload();
 }
 
-// ===============================
-// LOAD ANALYTICS STATS
-// ===============================
+// ==========================
+// LOAD ANALYTICS
+// ==========================
 async function loadStats() {
     try {
         const response = await fetch(`${API_URL}?action=stats&password=${adminPassword}`);
@@ -71,17 +69,20 @@ async function loadStats() {
     }
 }
 
-// ===============================
-// FILTER BY DATE
-// ===============================
+// ==========================
+// FILTER NUMBERS
+// ==========================
 async function applyFilter() {
-    const startDate = document.getElementById("startDate").value;
-    const endDate = document.getElementById("endDate").value;
+    const startInput = document.getElementById("startDate");
+    const endInput = document.getElementById("endDate");
 
-    if (!startDate || !endDate) {
-        alert("Please select both start and end date");
+    if (!startInput.value || !endInput.value) {
+        alert("Select start and end date");
         return;
     }
+
+    const startDate = new Date(startInput.value).toISOString().split("T")[0];
+    const endDate = new Date(endInput.value).toISOString().split("T")[0];
 
     try {
         const response = await fetch(
@@ -116,9 +117,7 @@ async function applyFilter() {
                 <td>${row[2]}</td>
                 <td>${row[3]}</td>
                 <td>
-                    <button onclick="deleteNumber('${row[0]}')">
-                        Delete
-                    </button>
+                    <button onclick="deleteNumber('${row[0]}')">Delete</button>
                 </td>
             `;
 
@@ -127,16 +126,15 @@ async function applyFilter() {
 
     } catch (error) {
         console.error("Filter error:", error);
-        alert("Failed to fetch filtered data");
+        alert("Failed to fetch data");
     }
 }
 
-// ===============================
+// ==========================
 // DELETE NUMBER
-// ===============================
+// ==========================
 async function deleteNumber(phone) {
-    const confirmDelete = confirm(`Delete ${phone}?`);
-    if (!confirmDelete) return;
+    if (!confirm(`Delete ${phone}?`)) return;
 
     try {
         const response = await fetch(

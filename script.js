@@ -1,25 +1,24 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbwiWioRQQfH3ujZNvc0KjggiPUDrAWc18bshKqa0Zz8CKuvkEbOGmTcIvTvKRnKT4pL/exec";
 
-let currentAction = "";
-
-function openSubmit() {
-    currentAction = "submit";
-    document.getElementById("popupTitle").innerText = "Submit Phone Number";
-    document.getElementById("popup").style.display = "flex";
-    resetForm();
-}
-
+// ===============================
+// OPEN SEARCH POPUP ONLY
+// ===============================
 function openSearch() {
-    currentAction = "search";
     document.getElementById("popupTitle").innerText = "Search Phone Number";
     document.getElementById("popup").style.display = "flex";
     resetForm();
 }
 
+// ===============================
+// CLOSE POPUP
+// ===============================
 function closePopup() {
     document.getElementById("popup").style.display = "none";
 }
 
+// ===============================
+// RESET FORM
+// ===============================
 function resetForm() {
     document.getElementById("phoneInput").value = "";
     document.getElementById("responseMsg").innerText = "";
@@ -29,12 +28,18 @@ function resetForm() {
     document.getElementById("phoneInput").focus();
 }
 
+// ===============================
+// ENTER KEY SUPPORT
+// ===============================
 function handleEnter(event) {
     if (event.key === "Enter") {
         handleAction();
     }
 }
 
+// ===============================
+// MAIN SEARCH FUNCTION
+// ===============================
 async function handleAction() {
     const phoneInput = document.getElementById("phoneInput");
     const phone = phoneInput.value.trim();
@@ -45,7 +50,7 @@ async function handleAction() {
     responseMsg.className = "";
     responseMsg.innerText = "";
 
-    // Validation
+    // ✅ Phone validation (10 digits only)
     if (!/^\d{10}$/.test(phone)) {
         responseMsg.innerText = "Enter valid 10-digit number";
         responseMsg.classList.add("error");
@@ -56,44 +61,29 @@ async function handleAction() {
     spinner.style.display = "block";
 
     try {
-        let data;
+        const response = await fetch(`${API_URL}?phone=${phone}`);
+        const data = await response.json();
 
-        if (currentAction === "submit") {
-            const response = await fetch(API_URL, {
-                method: "POST",
-                body: new URLSearchParams({ phone })
-            });
-            data = await response.json();
-
-            if (data.status === "duplicate") {
-                responseMsg.innerText = "Duplicate - Already exists";
-                responseMsg.classList.add("error");
-            } else {
-                responseMsg.innerText = "Successfully added!";
-                responseMsg.classList.add("success");
-            }
+        if (data.status === "duplicate") {
+            responseMsg.innerText = "Duplicate";
+            responseMsg.classList.add("error");
+        } 
+        else if (data.status === "not_found") {
+            responseMsg.innerText = "Not Found";
+            responseMsg.classList.add("warning");
+        } 
+        else {
+            responseMsg.innerText = "Server Error";
+            responseMsg.classList.add("error");
         }
 
-        if (currentAction === "search") {
-            const response = await fetch(`${API_URL}?phone=${phone}`);
-            data = await response.json();
-
-            if (data.status === "found") {
-                responseMsg.innerText = "Duplicate";
-                responseMsg.classList.add("success");
-            } else {
-                responseMsg.innerText = "Not found";
-                responseMsg.classList.add("warning");
-            }
-        }
-
-        // Auto clear after 40 seconds
+        // ✅ Auto clear after 40 seconds
         setTimeout(() => {
             resetForm();
         }, 40000);
 
     } catch (error) {
-        responseMsg.innerText = "Something went wrong!";
+        responseMsg.innerText = "Network Error";
         responseMsg.classList.add("error");
     }
 

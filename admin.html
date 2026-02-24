@@ -9,20 +9,19 @@
 
     <h1>Admin Dashboard</h1>
 
-    <!-- ================= LOGIN SECTION ================= -->
-    <div class="admin-login" id="loginSection">
+    <!-- LOGIN SECTION -->
+    <div id="loginSection" class="admin-login">
         <h2>Admin Login</h2>
         <input type="password" id="adminPassword" placeholder="Enter Admin Password">
         <button onclick="login()">Login</button>
     </div>
 
-    <!-- ================= DASHBOARD SECTION ================= -->
+    <!-- DASHBOARD SECTION -->
     <div id="dashboard" style="display:none;">
 
-        <!-- Logout -->
         <button onclick="logout()" class="logout-btn">Logout</button>
 
-        <!-- ================= ANALYTICS ================= -->
+        <!-- ANALYTICS CARDS -->
         <h2>Analytics Overview</h2>
 
         <div class="stats-cards">
@@ -42,8 +41,8 @@
             </div>
         </div>
 
-        <!-- ================= FILTER SECTION ================= -->
-        <h2>Filter By Date</h2>
+        <!-- FILTER SECTION -->
+        <h2>Filter Numbers (Dupe Sheet)</h2>
 
         <div class="filter-section">
             <input type="date" id="startDate">
@@ -51,7 +50,7 @@
             <button onclick="applyFilter()">Filter</button>
         </div>
 
-        <!-- ================= RESULTS ================= -->
+        <!-- RESULTS TABLE -->
         <h2>Results</h2>
 
         <div class="table-container">
@@ -65,14 +64,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Dynamic Rows Here -->
+                    <!-- Filled by JS -->
                 </tbody>
             </table>
         </div>
 
     </div>
 
-    <script src="admin.js"></script>
-
+<script src="admin.js"></script>
 </body>
 </html>

@@ -3,19 +3,22 @@
 <head>
     <title>Phone Checker</title>
     <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
     <h1>Phone Number System</h1>
 
+    <!-- ONLY SEARCH BUTTON -->
     <div class="buttons">
-        <button onclick="openSubmit()">Submit</button>
-        <button onclick="openSearch()">Search</button>
+        <button onclick="openSearch()">Search Number</button>
     </div>
 
+    <!-- POPUP -->
     <div id="popup" class="popup">
         <div class="popup-content">
-            <h2 id="popupTitle"></h2>
+
+            <h2 id="popupTitle">Search Phone Number</h2>
 
             <input 
                 type="text" 
@@ -25,16 +28,25 @@
                 onkeypress="handleEnter(event)"
             >
 
-            <button id="actionBtn" onclick="handleAction()">Submit</button>
+            <button id="actionBtn" onclick="handleAction()">
+                Search
+            </button>
 
+            <!-- Spinner -->
             <div id="spinner" class="spinner"></div>
 
+            <!-- Response Message -->
             <p id="responseMsg"></p>
 
-            <button class="close-btn" onclick="closePopup()">Close</button>
+            <!-- Close Button -->
+            <button class="close-btn" onclick="closePopup()">
+                Close
+            </button>
+
         </div>
     </div>
 
-<script src="script.js"></script>
+    <script src="script.js"></script>
+
 </body>
 </html>
