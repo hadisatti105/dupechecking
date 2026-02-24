@@ -38,7 +38,10 @@ function logout() {
 // ==========================
 async function loadStats() {
     try {
-        const response = await fetch(`${API_URL}?action=stats&password=${adminPassword}`);
+        const response = await fetch(
+            `${API_URL}?action=stats&password=${adminPassword}`
+        );
+
         const data = await response.json();
 
         if (data.status === "unauthorized") {
@@ -70,7 +73,7 @@ async function loadStats() {
 }
 
 // ==========================
-// FILTER NUMBERS
+// FILTER DUPE SHEET
 // ==========================
 async function applyFilter() {
     const startInput = document.getElementById("startDate");
@@ -117,7 +120,9 @@ async function applyFilter() {
                 <td>${row[2]}</td>
                 <td>${row[3]}</td>
                 <td>
-                    <button onclick="deleteNumber('${row[0]}')">Delete</button>
+                    <button onclick="deleteNumber('${row[0]}')">
+                        Delete
+                    </button>
                 </td>
             `;
 
@@ -153,5 +158,38 @@ async function deleteNumber(phone) {
     } catch (error) {
         console.error("Delete error:", error);
         alert("Error deleting number");
+    }
+}
+
+// ==========================
+// PROCESS SOLD NUMBERS (BATCH)
+// ==========================
+async function processSoldNumbers() {
+
+    if (!confirm("Process Sold Numbers now?")) return;
+
+    try {
+        const response = await fetch(
+            `${API_URL}?action=processSold&password=${adminPassword}`
+        );
+
+        const data = await response.json();
+
+        if (data.status === "processed") {
+            alert(`${data.moved} numbers moved to Dupe Sheet`);
+            loadStats();
+            applyFilter();
+        } else if (data.status === "nothing_to_process") {
+            alert("Nothing to process");
+        } else if (data.status === "unauthorized") {
+            alert("Unauthorized");
+            logout();
+        } else {
+            alert("Processing failed");
+        }
+
+    } catch (error) {
+        console.error("Process error:", error);
+        alert("Error processing sold numbers");
     }
 }

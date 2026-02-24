@@ -9,25 +9,34 @@
 
     <h1>Admin Dashboard</h1>
 
-    <!-- LOGIN SECTION -->
+    <!-- ================= LOGIN SECTION ================= -->
     <div id="loginSection" class="admin-login">
         <h2>Admin Login</h2>
         <input type="password" id="adminPassword" placeholder="Enter Admin Password">
         <button onclick="login()">Login</button>
     </div>
 
-    <!-- DASHBOARD SECTION -->
+    <!-- ================= DASHBOARD ================= -->
     <div id="dashboard" style="display:none;">
 
-        <button onclick="logout()" class="logout-btn">Logout</button>
+        <!-- Top Actions -->
+        <div class="top-actions">
+            <button onclick="processSoldNumbers()" class="process-btn">
+                Process Sold Numbers
+            </button>
 
-        <!-- ANALYTICS CARDS -->
+            <button onclick="logout()" class="logout-btn">
+                Logout
+            </button>
+        </div>
+
+        <!-- ================= ANALYTICS ================= -->
         <h2>Analytics Overview</h2>
 
         <div class="stats-cards">
             <div class="card">
                 <h3 id="submissionsCount">0</h3>
-                <p>Submissions</p>
+                <p>Submissions (Fresh)</p>
             </div>
 
             <div class="card">
@@ -41,8 +50,8 @@
             </div>
         </div>
 
-        <!-- FILTER SECTION -->
-        <h2>Filter Numbers (Dupe Sheet)</h2>
+        <!-- ================= FILTER ================= -->
+        <h2>Filter Dupe Sheet (Numbers)</h2>
 
         <div class="filter-section">
             <input type="date" id="startDate">
@@ -50,8 +59,8 @@
             <button onclick="applyFilter()">Filter</button>
         </div>
 
-        <!-- RESULTS TABLE -->
-        <h2>Results</h2>
+        <!-- ================= RESULTS ================= -->
+        <h2>Dupe Sheet Results</h2>
 
         <div class="table-container">
             <table id="resultsTable">
@@ -64,13 +73,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Filled by JS -->
+                    <!-- Data inserted by admin.js -->
                 </tbody>
             </table>
         </div>
 
     </div>
 
-<script src="admin.js"></script>
+    <script src="admin.js"></script>
+
 </body>
 </html>
