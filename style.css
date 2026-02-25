@@ -445,3 +445,42 @@ body {
 @keyframes spin {
     100% { transform: rotate(360deg); }
 }  
+
+.result-card {
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-align: center;
+    transition: 0.3s ease;
+}
+
+.duplicate-box {
+    background: #ffe5e5;
+    color: #c82333;
+}
+
+.fresh-box {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.clean-box {
+    background: #d4edda;
+    color: #155724;
+}
+
+.bad-box {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.warning-box {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.error-box {
+    background: #f8d7da;
+    color: #721c24;
+}
