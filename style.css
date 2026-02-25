@@ -417,3 +417,31 @@ body {
     flex-wrap: wrap;
     gap: 15px;
 }
+.success {
+    color: #1e7e34;
+    font-weight: bold;
+}
+
+.error {
+    color: #c82333;
+    font-weight: bold;
+}
+
+.warning {
+    color: #d39e00;
+    font-weight: bold;
+}
+.spinner {
+    display: none;
+    margin: 10px auto;
+    width: 25px;
+    height: 25px;
+    border: 3px solid #ccc;
+    border-top: 3px solid #333;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}  

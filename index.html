@@ -1,18 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Phone Checker</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>Phone Compliance Checker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1>Phone Number System</h1>
+    <!-- HEADER -->
+    <header class="main-header">
+        <h1>Phone Compliance System</h1>
+        <p class="subtitle">Duplicate + TCPA / DNC Scrubber</p>
+    </header>
 
-    <!-- ONLY SEARCH BUTTON -->
-    <div class="buttons">
-        <button onclick="openSearch()">Search Number</button>
-    </div>
+    <!-- SEARCH BUTTON SECTION -->
+    <section class="main-section">
+        <div class="buttons">
+            <button class="primary-btn" onclick="openSearch()">
+                🔍 Search Number
+            </button>
+        </div>
+    </section>
 
     <!-- POPUP -->
     <div id="popup" class="popup">
@@ -20,6 +31,7 @@
 
             <h2 id="popupTitle">Search Phone Number</h2>
 
+            <!-- Phone Input -->
             <input 
                 type="text" 
                 id="phoneInput" 
@@ -28,7 +40,8 @@
                 onkeypress="handleEnter(event)"
             >
 
-            <button id="actionBtn" onclick="handleAction()">
+            <!-- Search Button -->
+            <button id="actionBtn" class="primary-btn" onclick="handleAction()">
                 Search
             </button>
 
@@ -36,7 +49,7 @@
             <div id="spinner" class="spinner"></div>
 
             <!-- Response Message -->
-            <p id="responseMsg"></p>
+            <div id="responseMsg" class="response-box"></div>
 
             <!-- Close Button -->
             <button class="close-btn" onclick="closePopup()">
@@ -46,6 +59,12 @@
         </div>
     </div>
 
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>© 2026 Phone Compliance System</p>
+    </footer>
+
+    <!-- SCRIPT -->
     <script src="script.js"></script>
 
 </body>
