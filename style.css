@@ -1,486 +1,98 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
+body{
+    background:#0f172a;
+    font-family:Arial;
+    color:white;
+    margin:0;
 }
 
-body {
-    height: 100vh;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.container{
+    max-width:900px;
+    margin:40px auto;
+    padding:20px;
 }
 
-h1 {
-    color: white;
-    margin-bottom: 30px;
-    font-size: 32px;
+h1{
+    text-align:center;
+    margin-bottom:30px;
 }
 
-.buttons button {
-    padding: 12px 25px;
-    margin: 10px;
-    border: none;
-    border-radius: 8px;
-    background: white;
-    color: #764ba2;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
+.search-box{
+    display:flex;
+    gap:10px;
 }
 
-.buttons button:hover {
-    background: #764ba2;
-    color: white;
-    transform: translateY(-3px);
+input{
+    flex:1;
+    padding:12px;
+    border-radius:8px;
+    border:none;
+    font-size:16px;
 }
 
-.popup {
-    display: none;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    justify-content: center;
-    align-items: center;
+button{
+    padding:12px 20px;
+    border:none;
+    border-radius:8px;
+    background:#2563eb;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
 }
 
-.popup-content {
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(15px);
-    padding: 40px;
-    border-radius: 15px;
-    width: 350px;
-    text-align: center;
-    animation: fadeIn 0.3s ease;
+button:disabled{
+    opacity:0.6;
 }
 
-.popup-content h2 {
-    color: white;
-    margin-bottom: 20px;
+.spinner{
+    width:40px;
+    height:40px;
+    border:4px solid #1e293b;
+    border-top:4px solid #3b82f6;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+    margin:20px auto;
+    display:none;
 }
 
-input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: none;
-    margin-bottom: 15px;
-    text-align: center;
-    font-size: 16px;
+@keyframes spin{
+    100%{transform:rotate(360deg);}
 }
 
-#actionBtn {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    background: white;
-    color: #764ba2;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
+.card{
+    background:#1e293b;
+    padding:20px;
+    border-radius:12px;
+    margin-top:20px;
 }
 
-#actionBtn:hover {
-    background: #764ba2;
-    color: white;
+.card h2{
+    margin-top:0;
 }
 
-#actionBtn:disabled {
-    background: #ccc;
-    cursor: not-allowed;
+.success{
+    background:#14532d;
+    color:#4ade80;
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:10px;
 }
 
-.close-btn {
-    margin-top: 15px;
-    background: #ff4d4d;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 6px;
-    cursor: pointer;
+.danger{
+    background:#7f1d1d;
+    color:#f87171;
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:10px;
 }
 
-.close-btn:hover {
-    background: #cc0000;
+.big-status{
+    font-size:18px;
+    font-weight:bold;
+    text-align:center;
 }
 
-.spinner {
-    display: none;
-    margin: 15px auto;
-    width: 30px;
-    height: 30px;
-    border: 4px solid white;
-    border-top: 4px solid #764ba2;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-.success {
-    color: #00ff99;
-    font-weight: bold;
-}
-
-.error {
-    color: #ff4d4d;
-    font-weight: bold;
-}
-
-.warning {
-    color: #ffd633;
-    font-weight: bold;
-}
-
-@keyframes spin {
-    100% { transform: rotate(360deg); }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-/* ===================================== */
-/* ADMIN DASHBOARD PREMIUM UI */
-/* ===================================== */
-
-body {
-    background: linear-gradient(135deg, #1e1f26, #2b2e4a);
-    color: #ffffff;
-}
-
-/* Main Dashboard Container */
-#dashboard {
-    width: 95%;
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 40px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(25px);
-    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
-}
-
-/* Headings */
-#dashboard h2 {
-    margin-top: 30px;
-    margin-bottom: 20px;
-    font-weight: 600;
-    letter-spacing: 1px;
-}
-
-/* ================= STAT CARDS ================= */
-
-.stats-cards {
-    display: flex;
-    gap: 25px;
-    flex-wrap: wrap;
-}
-
-.card {
-    flex: 1;
-    min-width: 220px;
-    padding: 25px;
-    border-radius: 15px;
-    background: linear-gradient(145deg, #2f3245, #1f2130);
-    box-shadow: 8px 8px 20px #1a1c28,
-                -8px -8px 20px #343756;
-    transition: 0.3s ease;
-    text-align: center;
-}
-
-.card h3 {
-    font-size: 36px;
-    margin-bottom: 10px;
-    color: #00f5ff;
-}
-
-.card p {
-    font-size: 14px;
-    letter-spacing: 1px;
-    color: #bfc3ff;
-}
-
-.card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0, 245, 255, 0.3);
-}
-
-/* ================= FILTER SECTION ================= */
-
-.filter-section {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    align-items: center;
-}
-
-.filter-section input {
-    padding: 12px;
-    border-radius: 10px;
-    border: none;
-    background: #2f3245;
-    color: white;
-    min-width: 200px;
-}
-
-.filter-section input:focus {
-    outline: 2px solid #00f5ff;
-}
-
-.filter-section button {
-    padding: 12px 25px;
-    border-radius: 10px;
-    border: none;
-    background: linear-gradient(135deg, #00f5ff, #00aaff);
-    color: #1e1f26;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.filter-section button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0, 245, 255, 0.4);
-}
-
-/* ================= TABLE ================= */
-
-.table-container {
-    margin-top: 25px;
-    overflow-x: auto;
-}
-
-#resultsTable {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 12px;
-    overflow: hidden;
-    background: #2f3245;
-}
-
-#resultsTable th {
-    background: #1f2130;
-    padding: 15px;
-    text-align: left;
-    font-weight: 600;
-    color: #00f5ff;
-    font-size: 14px;
-    letter-spacing: 1px;
-}
-
-#resultsTable td {
-    padding: 14px;
-    border-bottom: 1px solid #444;
-    font-size: 14px;
-}
-
-#resultsTable tr:hover {
-    background: rgba(0, 245, 255, 0.05);
-}
-
-#resultsTable button {
-    background: #ff4d4d;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-#resultsTable button:hover {
-    background: #ff1a1a;
-}
-
-/* ================= LOGIN SECTION ================= */
-
-.admin-login {
-    width: 400px;
-    margin: 120px auto;
-    padding: 40px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(25px);
-    text-align: center;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.5);
-}
-
-.admin-login h2 {
-    margin-bottom: 25px;
-}
-
-.admin-login input {
-    width: 100%;
-    padding: 14px;
-    border-radius: 10px;
-    border: none;
-    background: #2f3245;
-    color: white;
-    margin-bottom: 20px;
-}
-
-.admin-login button {
-    width: 100%;
-    padding: 14px;
-    border-radius: 10px;
-    border: none;
-    background: linear-gradient(135deg, #00f5ff, #00aaff);
-    color: #1e1f26;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.admin-login button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 25px rgba(0, 245, 255, 0.4);
-}
-
-/* ================= LOGOUT BUTTON ================= */
-
-.logout-btn {
-    float: right;
-    background: #ff4d4d;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 8px;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.logout-btn:hover {
-    background: #ff1a1a;
-}
-
-/* ================= RESPONSIVE ================= */
-
-@media (max-width: 768px) {
-    .stats-cards {
-        flex-direction: column;
-    }
-
-    .filter-section {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .admin-login {
-        width: 90%;
-    }
-}
-/* ========================= */
-/* PROCESS SOLD BUTTON */
-/* ========================= */
-
-.process-btn {
-    background: linear-gradient(135deg, #00c853, #00e676);
-    color: #ffffff;
-    border: none;
-    padding: 12px 22px;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 20px rgba(0, 200, 83, 0.4);
-}
-
-.process-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 25px rgba(0, 200, 83, 0.6);
-}
-
-.process-btn:active {
-    transform: scale(0.98);
-}
-
-.process-btn:disabled {
-    background: #999;
-    cursor: not-allowed;
-    box-shadow: none;
-}
-/* ========================= */
-/* TOP ACTION BAR */
-/* ========================= */
-
-.top-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
-    gap: 15px;
-}
-.success {
-    color: #1e7e34;
-    font-weight: bold;
-}
-
-.error {
-    color: #c82333;
-    font-weight: bold;
-}
-
-.warning {
-    color: #d39e00;
-    font-weight: bold;
-}
-.spinner {
-    display: none;
-    margin: 10px auto;
-    width: 25px;
-    height: 25px;
-    border: 3px solid #ccc;
-    border-top: 3px solid #333;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    100% { transform: rotate(360deg); }
-}  
-
-.result-card {
-    padding: 12px;
-    margin-top: 10px;
-    border-radius: 8px;
-    font-weight: 600;
-    text-align: center;
-    transition: 0.3s ease;
-}
-
-.duplicate-box {
-    background: #ffe5e5;
-    color: #c82333;
-}
-
-.fresh-box {
-    background: #fff3cd;
-    color: #856404;
-}
-
-.clean-box {
-    background: #d4edda;
-    color: #155724;
-}
-
-.bad-box {
-    background: #f8d7da;
-    color: #721c24;
-}
-
-.warning-box {
-    background: #fff3cd;
-    color: #856404;
-}
-
-.error-box {
-    background: #f8d7da;
-    color: #721c24;
+.error-box{
+    background:#991b1b;
+    padding:15px;
+    border-radius:10px;
 }

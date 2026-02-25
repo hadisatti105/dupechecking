@@ -1,65 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Phone Compliance Checker</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- CSS -->
+    <title>TCPA Compliance Scrubber</title>
     <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
-    <!-- HEADER -->
-   
+<div class="container">
 
-    <!-- SEARCH BUTTON SECTION -->
-    <section class="main-section">
-        <div class="buttons">
-            <button class="primary-btn" onclick="openSearch()">
-                🔍 Search Number
-            </button>
-        </div>
-    </section>
+    <h1>TCPA Compliance Scrubber</h1>
 
-    <!-- POPUP -->
-    <div id="popup" class="popup">
-        <div class="popup-content">
-
-            <h2 id="popupTitle">Search Phone Number</h2>
-
-            <!-- Phone Input -->
-            <input 
-                type="text" 
-                id="phoneInput" 
-                placeholder="Enter 10-digit phone number"
-                maxlength="10"
-                onkeypress="handleEnter(event)"
-            >
-
-            <!-- Search Button -->
-            <button id="actionBtn" class="primary-btn" onclick="handleAction()">
-                Search
-            </button>
-
-            <!-- Spinner -->
-            <div id="spinner" class="spinner"></div>
-
-            <!-- Response Message -->
-            <div id="responseMsg" class="response-box"></div>
-
-            <!-- Close Button -->
-            <button class="close-btn" onclick="closePopup()">
-                Close
-            </button>
-
-        </div>
+    <div class="search-box">
+        <input 
+            type="text" 
+            id="phoneInput"
+            placeholder="Enter 10-digit phone number"
+            maxlength="10"
+            onkeypress="handleEnter(event)"
+        >
+        <button id="actionBtn" onclick="handleAction()">Scrub</button>
     </div>
 
-  
+    <div id="spinner" class="spinner"></div>
 
-    <!-- SCRIPT -->
-    <script src="script.js"></script>
+    <div id="results"></div>
 
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>

@@ -1,152 +1,108 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbwiWioRQQfH3ujZNvc0KjggiPUDrAWc18bshKqa0Zz8CKuvkEbOGmTcIvTvKRnKT4pL/exec";
 
-// ===============================
-// OPEN SEARCH POPUP
-// ===============================
-function openSearch() {
-    document.getElementById("popupTitle").innerText = "Search Phone Number";
-    document.getElementById("popup").style.display = "flex";
-    resetForm();
+// Enter key
+function handleEnter(e){
+    if(e.key === "Enter") handleAction();
 }
 
-// ===============================
-// CLOSE POPUP
-// ===============================
-function closePopup() {
-    document.getElementById("popup").style.display = "none";
-}
+async function handleAction(){
 
-// ===============================
-// RESET FORM
-// ===============================
-function resetForm() {
-    const phoneInput = document.getElementById("phoneInput");
-    const responseMsg = document.getElementById("responseMsg");
-
-    phoneInput.value = "";
-    responseMsg.innerHTML = "";
-    responseMsg.className = "";
-
-    document.getElementById("spinner").style.display = "none";
-    document.getElementById("actionBtn").disabled = false;
-
-    phoneInput.focus();
-}
-
-// ===============================
-// ENTER KEY SUPPORT
-// ===============================
-function handleEnter(event) {
-    if (event.key === "Enter") {
-        handleAction();
-    }
-}
-
-// ===============================
-// FORMAT TCPA RESULT
-// ===============================
-function formatScrub(scrub) {
-
-    if (!scrub || scrub.status === "Scrub Failed") {
-        return `<div class="warning-box">⚠ Scrub Unavailable</div>`;
-    }
-
-    const clean = scrub.clean;
-    const status = scrub.status || "Unknown";
-    const isBad = scrub.is_bad_number;
-
-    // CLEAN NUMBER
-    if (clean === 1 && !isBad) {
-        return `
-            <div class="result-card clean-box">
-                🟢 CLEAN NUMBER
-            </div>
-        `;
-    }
-
-    // BAD / DNC / LITIGATOR
-    if (clean === 0 || isBad) {
-        return `
-            <div class="result-card bad-box">
-                🔴 ${status}
-            </div>
-        `;
-    }
-
-    return `
-        <div class="result-card warning-box">
-            ⚠ ${status}
-        </div>
-    `;
-}
-
-// ===============================
-// MAIN SEARCH FUNCTION
-// ===============================
-async function handleAction() {
-
-    const phoneInput = document.getElementById("phoneInput");
-    const phone = phoneInput.value.trim();
-    const responseMsg = document.getElementById("responseMsg");
+    const phone = document.getElementById("phoneInput").value.trim();
+    const results = document.getElementById("results");
     const spinner = document.getElementById("spinner");
-    const actionBtn = document.getElementById("actionBtn");
+    const btn = document.getElementById("actionBtn");
 
-    responseMsg.innerHTML = "";
-    responseMsg.className = "";
+    results.innerHTML = "";
 
-    // ✅ 10-digit validation
-    if (!/^\d{10}$/.test(phone)) {
-        responseMsg.innerHTML = `
-            <div class="result-card error-box">
-                Enter valid 10-digit number
-            </div>
-        `;
+    if(!/^\d{10}$/.test(phone)){
+        results.innerHTML = `<div class="error-box">Enter valid 10-digit number</div>`;
         return;
     }
 
-    actionBtn.disabled = true;
     spinner.style.display = "block";
+    btn.disabled = true;
 
-    try {
+    try{
 
-        const response = await fetch(`${API_URL}?phone=${encodeURIComponent(phone)}`);
+        const response = await fetch(`${API_URL}?phone=${phone}`);
         const data = await response.json();
 
-        const isDuplicate = !!data.duplicate;
+        const duplicate = data.duplicate;
+        const scrub = data.scrub;
+        const raw = data.debug?.raw_response ? JSON.parse(data.debug.raw_response) : null;
 
-        // Duplicate Result Box
-        const duplicateHTML = isDuplicate
-            ? `
-                <div class="result-card duplicate-box">
-                    🔁 Duplicate Found
-                </div>
-              `
-            : `
-                <div class="result-card fresh-box">
-                    📥 Not Found
-                </div>
-              `;
+        let html = "";
 
-        // Scrub Result Box
-        const scrubHTML = formatScrub(data.scrub);
-
-        responseMsg.innerHTML = duplicateHTML + scrubHTML;
-
-        // Auto reset after 40 seconds
-        setTimeout(() => {
-            resetForm();
-        }, 40000);
-
-    } catch (error) {
-
-        responseMsg.innerHTML = `
-            <div class="result-card error-box">
-                Network / Server Error
+        // =========================
+        // DATABASE CHECK
+        // =========================
+        html += `
+        <div class="card">
+            <h2>Database Check</h2>
+            <div class="${duplicate ? 'danger' : 'success'}">
+                ${duplicate ? 'Duplicate' : 'Not Found'}
             </div>
+        </div>
         `;
 
+        // =========================
+        // TCPA SUMMARY
+        // =========================
+        html += `
+        <div class="card">
+            <h2>TCPA Risk Summary</h2>
+            <div class="${scrub.clean === 1 ? 'success' : 'danger'} big-status">
+                ${scrub.clean === 1 ? 'CLEAN - SAFE' : 'HIGH RISK'}
+            </div>
+            <p><strong>Status:</strong> ${scrub.status}</p>
+            <p><strong>Bad Number:</strong> ${scrub.is_bad_number}</p>
+        </div>
+        `;
+
+        // =========================
+        // MATCH INFORMATION
+        // =========================
+        if(raw && raw.match){
+
+            const matchType = raw.match[phone]?.type || "No Match Type";
+
+            html += `
+            <div class="card">
+                <h2>Match Details</h2>
+                <p><strong>Phone:</strong> ${phone}</p>
+                <p><strong>Match Type:</strong> ${matchType}</p>
+            </div>
+            `;
+        }
+
+        // =========================
+        // RESULTS DETAILS
+        // =========================
+        if(raw && raw.results){
+
+            const r = raw.results;
+
+            html += `
+            <div class="card">
+                <h2>Detailed Compliance Data</h2>
+                <p><strong>Status:</strong> ${r.status}</p>
+                <p><strong>Status Array:</strong> ${r.status_array.join(", ")}</p>
+                <p><strong>Case Title:</strong> ${r.case_title || "N/A"}</p>
+                <p><strong>Multiple Cases:</strong> ${r.multiple_cases || "0"}</p>
+                <p><strong>Phone Type:</strong> ${r.phone_type || "Unknown"}</p>
+                <p><strong>Phone Status:</strong> ${r.phone_status || "N/A"}</p>
+                <p><strong>Created At:</strong> ${r.created_at || "N/A"}</p>
+                <p><strong>Updated At:</strong> ${r.updated_at || "N/A"}</p>
+            </div>
+            `;
+        }
+
+        results.innerHTML = html;
+
+    }catch(error){
+        results.innerHTML = `<div class="error-box">Network / Server Error</div>`;
     }
 
     spinner.style.display = "none";
-    actionBtn.disabled = false;
+    btn.disabled = false;
 }
