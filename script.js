@@ -123,7 +123,7 @@ async function handleAction() {
               `
             : `
                 <div class="result-card fresh-box">
-                    📥 Not Found in Database
+                    📥 Not Found
                 </div>
               `;
 
