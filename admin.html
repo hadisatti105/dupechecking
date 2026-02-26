@@ -1,86 +1,84 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
-    <h1>Admin Dashboard</h1>
+<div class="container">
 
-    <!-- ================= LOGIN SECTION ================= -->
-    <div id="loginSection" class="admin-login">
-        <h2>Admin Login</h2>
-        <input type="password" id="adminPassword" placeholder="Enter Admin Password">
-        <button onclick="login()">Login</button>
+  <h1>Admin Dashboard</h1>
+
+  <!-- LOGIN -->
+  <div id="loginSection" class="card">
+    <h2>Admin Login</h2>
+    <input type="password" id="adminPassword" placeholder="Enter Admin Password">
+    <button onclick="login()">Login</button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard" style="display:none;">
+
+    <div class="top-actions">
+      <button class="btn-secondary" onclick="logout()">Logout</button>
+      <button class="btn-primary" onclick="processSoldNumbers()">Process Sold Numbers</button>
     </div>
 
-    <!-- ================= DASHBOARD ================= -->
-    <div id="dashboard" style="display:none;">
+    <div class="grid">
+      <div class="card">
+        <h2>Analytics</h2>
+        <div class="stat-row"><span>Submissions</span><strong id="submissionsCount">0</strong></div>
+        <div class="stat-row"><span>Duplicates</span><strong id="duplicatesCount">0</strong></div>
+        <div class="stat-row"><span>Searches</span><strong id="searchesCount">0</strong></div>
+        <div class="stat-row"><span>Moved</span><strong id="movedCount">0</strong></div>
+        <div id="processResult" class="muted" style="margin-top:10px;"></div>
+      </div>
 
-        <!-- Top Actions -->
-        <div class="top-actions">
-            <button onclick="processSoldNumbers()" class="process-btn">
-                Process Sold Numbers
-            </button>
+      <div class="card">
+        <h2>Filter</h2>
 
-            <button onclick="logout()" class="logout-btn">
-                Logout
-            </button>
-        </div>
+        <label class="label">Sheet</label>
+        <select id="sheetSelect">
+          <option value="Numbers">Numbers (Dupe DB)</option>
+          <option value="FreshNumbers">FreshNumbers</option>
+        </select>
 
-        <!-- ================= ANALYTICS ================= -->
-        <h2>Analytics Overview</h2>
+        <label class="label">Start Date</label>
+        <input type="date" id="startDate">
 
-        <div class="stats-cards">
-            <div class="card">
-                <h3 id="submissionsCount">0</h3>
-                <p>Submissions (Fresh)</p>
-            </div>
+        <label class="label">End Date</label>
+        <input type="date" id="endDate">
 
-            <div class="card">
-                <h3 id="duplicatesCount">0</h3>
-                <p>Duplicates</p>
-            </div>
-
-            <div class="card">
-                <h3 id="searchesCount">0</h3>
-                <p>Searches</p>
-            </div>
-        </div>
-
-        <!-- ================= FILTER ================= -->
-        <h2>Filter Dupe Sheet (Numbers)</h2>
-
-        <div class="filter-section">
-            <input type="date" id="startDate">
-            <input type="date" id="endDate">
-            <button onclick="applyFilter()">Filter</button>
-        </div>
-
-        <!-- ================= RESULTS ================= -->
-        <h2>Dupe Sheet Results</h2>
-
-        <div class="table-container">
-            <table id="resultsTable">
-                <thead>
-                    <tr>
-                        <th>Phone</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Data inserted by admin.js -->
-                </tbody>
-            </table>
-        </div>
-
+        <button onclick="applyFilter()">Filter</button>
+      </div>
     </div>
 
-    <script src="admin.js"></script>
+    <div class="card">
+      <h2>Results</h2>
+      <div class="table-wrap">
+        <table id="resultsTable">
+          <thead>
+            <tr>
+              <th>Phone</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Status</th>
+              <th>Clean</th>
+              <th>Bad</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
 
+  </div>
+
+</div>
+
+<script src="admin.js"></script>
 </body>
 </html>

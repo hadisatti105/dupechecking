@@ -2,194 +2,141 @@ const API_URL = "https://script.google.com/macros/s/AKfycbwiWioRQQfH3ujZNvc0Kjgg
 
 let adminPassword = "";
 
-// ==========================
-// LOGIN
-// ==========================
 function login() {
-    adminPassword = document.getElementById("adminPassword").value.trim();
+  adminPassword = document.getElementById("adminPassword").value.trim();
+  if (!adminPassword) return alert("Enter Admin Password");
 
-    if (!adminPassword) {
-        alert("Enter Admin Password");
-        return;
-    }
+  document.getElementById("loginSection").style.display = "none";
+  document.getElementById("dashboard").style.display = "block";
 
-    document.getElementById("loginSection").style.display = "none";
-    document.getElementById("dashboard").style.display = "block";
+  // default dates = today
+  const today = new Date().toISOString().split("T")[0];
+  document.getElementById("startDate").value = today;
+  document.getElementById("endDate").value = today;
 
-    loadStats();
-
-    // Auto load today's data
-    const today = new Date().toISOString().split("T")[0];
-    document.getElementById("startDate").value = today;
-    document.getElementById("endDate").value = today;
-
-    applyFilter();
+  loadStats();
+  applyFilter();
 }
 
-// ==========================
-// LOGOUT
-// ==========================
 function logout() {
-    location.reload();
+  location.reload();
 }
 
-// ==========================
-// LOAD ANALYTICS
-// ==========================
 async function loadStats() {
-    try {
-        const response = await fetch(
-            `${API_URL}?action=stats&password=${adminPassword}`
-        );
+  const res = await fetch(`${API_URL}?action=stats&password=${encodeURIComponent(adminPassword)}`);
+  const data = await res.json();
 
-        const data = await response.json();
+  if (data.status === "unauthorized") {
+    alert("Wrong password");
+    logout();
+    return;
+  }
 
-        if (data.status === "unauthorized") {
-            alert("Wrong Password");
-            logout();
-            return;
-        }
+  let submissions = 0, duplicates = 0, searches = 0, moved = 0;
 
-        let submissions = 0;
-        let duplicates = 0;
-        let searches = 0;
+  (data.data || []).forEach(row => {
+    const key = String(row[0] || "").trim();
+    const val = Number(row[1] || 0);
+    if (key === "submissions") submissions = val;
+    if (key === "duplicates") duplicates = val;
+    if (key === "searches") searches = val;
+    if (key === "moved") moved = val;
+  });
 
-        if (data.data) {
-            data.data.forEach(row => {
-                if (row[0] === "submissions") submissions = row[1];
-                if (row[0] === "duplicates") duplicates = row[1];
-                if (row[0] === "searches") searches = row[1];
-            });
-        }
-
-        document.getElementById("submissionsCount").innerText = submissions;
-        document.getElementById("duplicatesCount").innerText = duplicates;
-        document.getElementById("searchesCount").innerText = searches;
-
-    } catch (error) {
-        console.error("Stats error:", error);
-        alert("Failed to load analytics");
-    }
+  document.getElementById("submissionsCount").innerText = submissions;
+  document.getElementById("duplicatesCount").innerText = duplicates;
+  document.getElementById("searchesCount").innerText = searches;
+  document.getElementById("movedCount").innerText = moved;
 }
 
-// ==========================
-// FILTER DUPE SHEET
-// ==========================
 async function applyFilter() {
-    const startInput = document.getElementById("startDate");
-    const endInput = document.getElementById("endDate");
+  const startDate = document.getElementById("startDate").value;
+  const endDate = document.getElementById("endDate").value;
+  const sheet = document.getElementById("sheetSelect").value;
 
-    if (!startInput.value || !endInput.value) {
-        alert("Select start and end date");
-        return;
-    }
+  if (!startDate || !endDate) return alert("Select start and end date");
 
-    const startDate = new Date(startInput.value).toISOString().split("T")[0];
-    const endDate = new Date(endInput.value).toISOString().split("T")[0];
+  const url =
+    `${API_URL}?action=filter&password=${encodeURIComponent(adminPassword)}&sheet=${encodeURIComponent(sheet)}&startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
 
-    try {
-        const response = await fetch(
-            `${API_URL}?action=filter&password=${adminPassword}&startDate=${startDate}&endDate=${endDate}`
-        );
+  const res = await fetch(url);
+  const data = await res.json();
 
-        const data = await response.json();
+  if (data.status === "unauthorized") {
+    alert("Unauthorized");
+    logout();
+    return;
+  }
 
-        if (data.status === "unauthorized") {
-            alert("Unauthorized");
-            logout();
-            return;
-        }
+  const tbody = document.querySelector("#resultsTable tbody");
+  tbody.innerHTML = "";
 
-        const tableBody = document.querySelector("#resultsTable tbody");
-        tableBody.innerHTML = "";
+  if (!data.data || data.data.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">No Data Found</td></tr>`;
+    return;
+  }
 
-        if (!data.data || data.data.length === 0) {
-            tableBody.innerHTML = `
-                <tr>
-                    <td colspan="4" style="text-align:center;">No Data Found</td>
-                </tr>
-            `;
-            return;
-        }
+  data.data.forEach(row => {
+    // row layout: [Phone, Timestamp, Date, Time, Clean, Status, IsBad, StatusArray, MatchType]
+    const phone = row[0] || "";
+    const date = row[2] || "";
+    const time = row[3] || "";
+    const clean = row[4];
+    const status = row[5] || "";
+    const bad = row[6];
 
-        data.data.forEach(row => {
-            const tr = document.createElement("tr");
-
-            tr.innerHTML = `
-                <td>${row[0]}</td>
-                <td>${row[2]}</td>
-                <td>${row[3]}</td>
-                <td>
-                    <button onclick="deleteNumber('${row[0]}')">
-                        Delete
-                    </button>
-                </td>
-            `;
-
-            tableBody.appendChild(tr);
-        });
-
-    } catch (error) {
-        console.error("Filter error:", error);
-        alert("Failed to fetch data");
-    }
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${phone}</td>
+      <td>${date}</td>
+      <td>${time}</td>
+      <td>${status}</td>
+      <td>${clean === "" || clean === null || clean === undefined ? "" : clean}</td>
+      <td>${bad === "" || bad === null || bad === undefined ? "" : bad}</td>
+      <td><button class="btn-danger" onclick="deleteNumber('${phone}')">Delete</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
 }
 
-// ==========================
-// DELETE NUMBER
-// ==========================
 async function deleteNumber(phone) {
-    if (!confirm(`Delete ${phone}?`)) return;
+  const sheet = document.getElementById("sheetSelect").value;
+  if (!confirm(`Delete ${phone} from ${sheet}?`)) return;
 
-    try {
-        const response = await fetch(
-            `${API_URL}?action=delete&password=${adminPassword}&phone=${phone}`
-        );
+  const url =
+    `${API_URL}?action=delete&password=${encodeURIComponent(adminPassword)}&sheet=${encodeURIComponent(sheet)}&phone=${encodeURIComponent(phone)}`;
 
-        const data = await response.json();
+  const res = await fetch(url);
+  const data = await res.json();
 
-        if (data.status === "deleted") {
-            applyFilter();
-            loadStats();
-        } else {
-            alert("Delete failed");
-        }
-
-    } catch (error) {
-        console.error("Delete error:", error);
-        alert("Error deleting number");
-    }
+  if (data.status === "deleted") {
+    await applyFilter();
+    await loadStats();
+  } else {
+    alert("Delete failed / not found");
+  }
 }
 
-// ==========================
-// PROCESS SOLD NUMBERS (BATCH)
-// ==========================
 async function processSoldNumbers() {
+  const el = document.getElementById("processResult");
+  el.innerText = "Processing...";
 
-    if (!confirm("Process Sold Numbers now?")) return;
+  const url = `${API_URL}?action=processSold&password=${encodeURIComponent(adminPassword)}`;
+  const res = await fetch(url);
+  const data = await res.json();
 
-    try {
-        const response = await fetch(
-            `${API_URL}?action=processSold&password=${adminPassword}`
-        );
+  if (data.status === "unauthorized") {
+    alert("Unauthorized");
+    logout();
+    return;
+  }
 
-        const data = await response.json();
+  if (data.status === "processed") {
+    el.innerText = `✅ Moved ${data.moved} rows from FreshNumbers → Numbers`;
+  } else {
+    el.innerText = "Nothing to process.";
+  }
 
-        if (data.status === "processed") {
-            alert(`${data.moved} numbers moved to Dupe Sheet`);
-            loadStats();
-            applyFilter();
-        } else if (data.status === "nothing_to_process") {
-            alert("Nothing to process");
-        } else if (data.status === "unauthorized") {
-            alert("Unauthorized");
-            logout();
-        } else {
-            alert("Processing failed");
-        }
-
-    } catch (error) {
-        console.error("Process error:", error);
-        alert("Error processing sold numbers");
-    }
+  await loadStats();
+  await applyFilter();
 }
